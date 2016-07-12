@@ -80,7 +80,7 @@ build:
             wmake libo  OSspecific/$WM_OSTYPE
             wmake libso foam
             decompositionMethods/AllwmakeLnInclude
-            decompositionMethods/Allwmake
+            (cd decompositionMethods && wmakeLnInclude decompositionMethods && wmake libso decompositionMethods && wmake libso scotchDecomp)
             wmake libso lagrangian/basic
             wmake libso edgeMesh
             wmake libso surfMesh
