@@ -141,3 +141,6 @@ dealii:
             password: $DOCKER_PASSWORD
             repository: davidsblom/foam-fsi
             registry: https://registry.hub.docker.com
+        - script:
+            name: cleanup
+            code: rm -rf *
