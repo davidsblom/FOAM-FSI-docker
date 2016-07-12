@@ -124,7 +124,7 @@ dealii:
 
                 export DEALII_VERSION=8.4.1
                 wget https://github.com/dealii/dealii/releases/download/v${DEALII_VERSION}/dealii-${DEALII_VERSION}.tar.gz
-                tar xvf dealii-${DEALII_VERSION}.tar.gz
+                tar xf dealii-${DEALII_VERSION}.tar.gz
                 rm dealii-${DEALII_VERSION}.tar.gz
 
                 cd dealii-${DEALII_VERSION} && mkdir build bin && cd build
