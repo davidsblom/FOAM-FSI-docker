@@ -32,7 +32,7 @@ build:
             echo "export LIBCCMIO_SYSTEM=1" >> $settings
             echo "export WM_MPLIB=SYSTEMOPENMPI" >> $settings
             echo "export OPENMPI_DIR=/usr" >> $settings
-            echo "export OPENMPI_BIN_DIR=$OPENMPI_DIR/bin" >> $settings
+            echo "export OPENMPI_BIN_DIR=/usr/bin" >> $settings
             echo "unset WM_THIRD_PARTY_USE_CMAKE_322" >> $settings
             echo "unset WM_THIRD_PARTY_USE_HWLOC_1101" >> $settings
             echo "unset WM_THIRD_PARTY_USE_SCOTCH_604" >> $settings
