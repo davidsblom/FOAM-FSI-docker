@@ -23,9 +23,15 @@ build:
             echo "export CMAKE_SYSTEM=1" >> $settings
             echo "export HWLOC_SYSTEM=1" >> $settings
             echo "export SCOTCH_SYSTEM=1" >> $settings
+            echo "export SCOTCH_INCLUDE_DIR=/usr/include/scotch" >> $settings
+            echo "export SCOTCH_LIB_DIR=/usr/lib" >> $settings
             echo "export PYFOAM_SYSTEM=1" >> $settings
             echo "export METIS_SYSTEM=1" >> $settings
+            echo "export METIS_INCLUDE_DIR=/usr/include/metis" >> $settings
+            echo "export METIS_LIB_DIR=/usr/lib" >> $settings
             echo "export PARMETIS_SYSTEM=1" >> $settings
+            echo "export PARMETIS_INCLUDE_DIR=/usr/include/parmetis" >> $settings
+            echo "export PARMETIS_LIB_DIR=/usr/lib" >> $settings
             echo "export CUDA_IGNORE=1" >> $settings
             echo "export SWAK4FOAM_SYSTEM=1" >> $settings
             echo "export PARMGRIDGEN_SYSTEM=1" >> $settings
