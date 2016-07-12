@@ -128,6 +128,12 @@ build:
 dealii:
     steps:
         - script:
+            name: install dependencies
+            code: |
+                sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
+                apt-get -qq update
+                apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev
+        - script:
             name: compile
             code: |
                 source foam-extend-3.2/etc/prefs.sh
