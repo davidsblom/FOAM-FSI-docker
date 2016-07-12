@@ -102,6 +102,14 @@ build:
             wmake libso coupledMatrix
             wmake libso sampling
             wmake libso ODE
+    - script:
+        name: foam-extend libraries-3
+        code: |
+            cd foam-extend-3.2
+            source etc/prefs.sh
+            source etc/bashrc
+
+            cd src
             thermophysicalModels/Allwmake
             transportModels/Allwmake
             turbulenceModels/Allwmake
