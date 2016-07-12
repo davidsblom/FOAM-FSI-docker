@@ -38,6 +38,7 @@ build:
     - script:
         name: third-party packages
         code: |
+            export FOAM_INST_DIR=`pwd`
             cd foam-extend-3.2
             source etc/bashrc
 
