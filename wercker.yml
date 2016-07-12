@@ -33,7 +33,7 @@ build:
             echo "export SCOTCH_LIB_DIR=/usr/lib" >> $settings
             echo "export PYFOAM_SYSTEM=1" >> $settings
             echo "export METIS_SYSTEM=1" >> $settings
-            echo "export METIS_INCLUDE_DIR=/usr/include/metis" >> $settings
+            echo "export METIS_INCLUDE_DIR=/usr/include" >> $settings
             echo "export METIS_LIB_DIR=/usr/lib" >> $settings
             echo "export PARMETIS_SYSTEM=1" >> $settings
             echo "export PARMETIS_INCLUDE_DIR=/usr/include" >> $settings
