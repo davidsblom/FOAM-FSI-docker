@@ -1,0 +1,51 @@
+box: davidsblom/foam-fsi
+
+command-timeout: 60
+no-response-timeout: 30
+
+build:
+  steps:
+    - script:
+        name: download foam-extend-3.2
+        code: |
+            git clone git://git.code.sf.net/p/foam-extend/foam-extend-3.2
+    - script:
+        name: configuration
+        code: |
+            sed -i s/"CC          = g++ -m64"/"CC          = mpicxx -m64"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++
+            sed -i s/"c++OPT      = -O3"/"c++OPT      = -O3 -DNDEBUG"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Opt
+            sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -g -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN --coverage -fprofile-arcs -ftest-coverage"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Debug
+
+            settings=foam-extend-3.2/etc/prefs.sh
+            echo "export PARAVIEW_SYSTEM=1" >> $settings
+            echo "export CMAKE_SYSTEM=1" >> $settings
+            echo "export HWLOC_SYSTEM=1" >> $settings
+            echo "export SCOTCH_SYSTEM=1" >> $settings
+            echo "export PYFOAM_SYSTEM=1" >> $settings
+            echo "export METIS_SYSTEM=1" >> $settings
+            echo "export PARMETIS_SYSTEM=1" >> $settings
+            echo "export CUDA_IGNORE=1" >> $settings
+            echo "export SWAK4FOAM_SYSTEM=1" >> $settings
+            echo "export PARMGRIDGEN_SYSTEM=1" >> $settings
+            echo "export LIBCCMIO_SYSTEM=1" >> $settings
+            echo "export WM_MPLIB=SYSTEMOPENMPI" >> $settings
+            echo "export OPENMPI_DIR=/usr" >> $settings
+            echo "export OPENMPI_BIN_DIR=$OPENMPI_DIR/bin" >> $settings
+            echo "unset WM_THIRD_PARTY_USE_CMAKE_322" >> $settings
+            echo "unset WM_THIRD_PARTY_USE_HWLOC_1101" >> $settings
+            echo "unset WM_THIRD_PARTY_USE_SCOTCH_604" >> $settings
+            echo "unset WM_THIRD_PARTY_USE_PYFOAM_064" >> $settings
+    - script:
+        name: third-party packages
+        code: |
+            cd foam-extend-3.2
+            source etc/bashrc
+
+            # wmake is required for subsequent targets
+            ( cd wmake/src && make )
+
+            # build ThirdParty sources
+            ( cd $WM_THIRD_PARTY_DIR && ./AllMake )
+
+            # cleanup build files
+            rm -rf $WM_THIRD_PARTY_DIR/rpmBuild/BUILD/*
