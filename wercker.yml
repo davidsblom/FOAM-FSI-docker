@@ -122,6 +122,14 @@ build:
             transportModels/Allwmake
             turbulenceModels/Allwmake
             lagrangian/Allwmake
+    - script:
+        name: foam-extend libraries-5
+        code: |
+            cd foam-extend-3.2
+            source etc/prefs.sh
+            source etc/bashrc
+
+            cd src
             wmake libso solidModels
     - script:
         name: cleanup build files
