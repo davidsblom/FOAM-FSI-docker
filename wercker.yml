@@ -36,6 +36,7 @@ build:
             echo "unset WM_THIRD_PARTY_USE_HWLOC_1101" >> $settings
             echo "unset WM_THIRD_PARTY_USE_SCOTCH_604" >> $settings
             echo "unset WM_THIRD_PARTY_USE_PYFOAM_064" >> $settings
+            cat $settings
     - script:
         name: third-party packages
         code: |
