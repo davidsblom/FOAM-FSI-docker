@@ -17,6 +17,7 @@ build:
             sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -g -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN --coverage -fprofile-arcs -ftest-coverage"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Debug
 
             settings=foam-extend-3.2/etc/prefs.sh
+            echo "export FOAM_INST_DIR=`pwd`" >> $settings
             echo "export PARAVIEW_SYSTEM=1" >> $settings
             echo "export CMAKE_SYSTEM=1" >> $settings
             echo "export HWLOC_SYSTEM=1" >> $settings
@@ -38,7 +39,6 @@ build:
     - script:
         name: third-party packages
         code: |
-            export FOAM_INST_DIR=`pwd`
             cd foam-extend-3.2
             source etc/prefs.sh
             source etc/bashrc
@@ -54,7 +54,6 @@ build:
     - script:
         name: foam-extend libraries-1
         code: |
-            export FOAM_INST_DIR=`pwd`
             cd foam-extend-3.2
             source etc/prefs.sh
             source etc/bashrc
@@ -78,7 +77,6 @@ build:
     - script:
         name: foam-extend libraries-2
         code: |
-            export FOAM_INST_DIR=`pwd`
             cd foam-extend-3.2
             source etc/prefs.sh
             source etc/bashrc
