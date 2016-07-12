@@ -81,6 +81,14 @@ build:
             wmake libso foam
             decompositionMethods/AllwmakeLnInclude
             (cd decompositionMethods && wmakeLnInclude decompositionMethods && wmake libso decompositionMethods && wmake libso scotchDecomp)
+    - script:
+        name: foam-extend libraries-2
+        code: |
+            cd foam-extend-3.2
+            source etc/prefs.sh
+            source etc/bashrc
+
+            cd src
             wmake libso lagrangian/basic
             wmake libso edgeMesh
             wmake libso surfMesh
@@ -89,7 +97,7 @@ build:
             wmake libso finiteArea
             wmake libso lduSolvers
     - script:
-        name: foam-extend libraries-2
+        name: foam-extend libraries-3
         code: |
             cd foam-extend-3.2
             source etc/prefs.sh
@@ -103,7 +111,7 @@ build:
             wmake libso sampling
             wmake libso ODE
     - script:
-        name: foam-extend libraries-3
+        name: foam-extend libraries-4
         code: |
             cd foam-extend-3.2
             source etc/prefs.sh
