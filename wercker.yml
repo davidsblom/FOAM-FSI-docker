@@ -6,6 +6,12 @@ no-response-timeout: 30
 build:
   steps:
     - script:
+        name: install dependencies
+        code: |
+            sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
+            apt-get -qq update
+            apt-get install -y libparmetis-dev
+    - script:
         name: download foam-extend-3.2
         code: |
             git clone git://git.code.sf.net/p/foam-extend/foam-extend-3.2
@@ -30,7 +36,7 @@ build:
             echo "export METIS_INCLUDE_DIR=/usr/include/metis" >> $settings
             echo "export METIS_LIB_DIR=/usr/lib" >> $settings
             echo "export PARMETIS_SYSTEM=1" >> $settings
-            echo "export PARMETIS_INCLUDE_DIR=/usr/include/parmetis" >> $settings
+            echo "export PARMETIS_INCLUDE_DIR=/usr/include" >> $settings
             echo "export PARMETIS_LIB_DIR=/usr/lib" >> $settings
             echo "export CUDA_IGNORE=1" >> $settings
             echo "export SWAK4FOAM_SYSTEM=1" >> $settings
