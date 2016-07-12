@@ -119,3 +119,26 @@ build:
         tag: foam-extend-3.2
         repository: davidsblom/foam-fsi-docker
         registry: https://registry.hub.docker.com
+
+dealii:
+    steps:
+        - script:
+            name: compile
+            code: |
+                source foam-extend-3.2/etc/prefs.sh
+                source foam-extend-3.2/etc/bashrc
+
+                export DEALII_VERSION=8.4.1
+                wget https://github.com/dealii/dealii/releases/download/v${DEALII_VERSION}/dealii-${DEALII_VERSION}.tar.gz
+                tar xvf dealii-${DEALII_VERSION}.tar.gz
+                rm dealii-${DEALII_VERSION}.tar.gz
+
+                cd dealii-${DEALII_VERSION} && mkdir build bin && cd build
+                cmake -DDEAL_II_WITH_MPI=ON \
+                    -DDEAL_II_COMPONENT_EXAMPLES=OFF \
+                    -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
+                    -DCMAKE_BUILD_TYPE=Release \
+                    ..
+
+                make -j $WM_NCOMPPROCS && make install && make test
+                rm -rf build
