@@ -73,3 +73,28 @@ build:
             wmake libso finiteVolume
             wmake libso finiteArea
             wmake libso lduSolvers
+    - script:
+        name: foam-extend libraries-2
+        code: |
+            export FOAM_INST_DIR=`pwd`
+            cd foam-extend-3.2
+            source etc/bashrc
+
+            cd src
+            wmake libso tetFiniteElement
+            dynamicMesh/AllwmakeLnInclude
+            dynamicMesh/Allwmake
+            wmake libso coupledMatrix
+            wmake libso sampling
+            wmake libso ODE
+            thermophysicalModels/Allwmake
+            transportModels/Allwmake
+            turbulenceModels/Allwmake
+            lagrangian/Allwmake
+            wmake libso solidModels
+    - script:
+        name: cleanup build files
+        code: |
+            cd foam-extend-3.2
+            find . -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
+            find . -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
