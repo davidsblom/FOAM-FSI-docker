@@ -53,9 +53,7 @@ build:
     - script:
         name: third-party packages
         code: |
-            cd foam-extend-3.2
-            source etc/prefs.sh
-            source etc/bashrc
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
             # wmake is required for subsequent targets
             ( cd wmake/src && make )
@@ -68,9 +66,7 @@ build:
     - script:
         name: foam-extend libraries-1
         code: |
-            cd foam-extend-3.2
-            source etc/prefs.sh
-            source etc/bashrc
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmakePrintBuild -check || /bin/rm -f foam/Make/$WM_OPTIONS/global.? 2>/dev/null
@@ -84,9 +80,7 @@ build:
     - script:
         name: foam-extend libraries-2
         code: |
-            cd foam-extend-3.2
-            source etc/prefs.sh
-            source etc/bashrc
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmake libso lagrangian/basic
@@ -99,9 +93,7 @@ build:
     - script:
         name: foam-extend libraries-3
         code: |
-            cd foam-extend-3.2
-            source etc/prefs.sh
-            source etc/bashrc
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmake libso tetFiniteElement
@@ -113,9 +105,7 @@ build:
     - script:
         name: foam-extend libraries-4
         code: |
-            cd foam-extend-3.2
-            source etc/prefs.sh
-            source etc/bashrc
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             thermophysicalModels/Allwmake
@@ -125,12 +115,9 @@ build:
     - script:
         name: foam-extend libraries-5
         code: |
-            cd foam-extend-3.2
-            source etc/prefs.sh
-            source etc/bashrc
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
-            cd src
-            wmake libso solidModels
+            cd src && wmake libso solidModels
     - script:
         name: cleanup build files
         code: |
