@@ -50,3 +50,26 @@ build:
 
             # cleanup build files
             rm -rf $WM_THIRD_PARTY_DIR/rpmBuild/BUILD/*
+    - script:
+        name: foam-extend libraries-1
+        code: |
+            export FOAM_INST_DIR=`pwd`
+            cd foam-extend-3.2
+            source etc/bashrc
+
+            cd src
+            wmakePrintBuild -check || /bin/rm -f foam/Make/$WM_OPTIONS/global.? 2>/dev/null
+            wmakeLnInclude foam
+            wmakeLnInclude meshTools
+            wmakeLnInclude OSspecific/$WM_OSTYPE
+            wmake libo  OSspecific/$WM_OSTYPE
+            wmake libso foam
+            decompositionMethods/AllwmakeLnInclude
+            decompositionMethods/Allwmake
+            wmake libso lagrangian/basic
+            wmake libso edgeMesh
+            wmake libso surfMesh
+            wmake libso meshTools
+            wmake libso finiteVolume
+            wmake libso finiteArea
+            wmake libso lduSolvers
