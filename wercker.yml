@@ -14,7 +14,9 @@ build:
     - script:
         name: download foam-extend-3.2
         code: |
-            git clone git://git.code.sf.net/p/foam-extend/foam-extend-3.2
+            git clone https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-3.2
+            cd foam-extend-3.2
+            rm -rf tutorials applications
     - script:
         name: configuration
         code: |
@@ -115,11 +117,19 @@ build:
             cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
             cd src && wmake libso solidModels
+
+dealii:
+  steps:
+    - script:
+        name: install dependencies
+        code: |
+            sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
+            apt-get -qq update
+            apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev
     - script:
         name: deal.II
         code: |
-            source foam-extend-3.2/etc/prefs.sh
-            source foam-extend-3.2/etc/bashrc
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc && cd ..
 
             export DEALII_VERSION=8.4.1
             wget https://github.com/dealii/dealii/releases/download/v${DEALII_VERSION}/dealii-${DEALII_VERSION}.tar.gz
@@ -134,15 +144,19 @@ build:
                 ..
 
             make -j $WM_NCOMPPROCS && make install && make test
+            cd ..
             rm -rf build
     - script:
         name: copy to output dir
-        code: cp -r foam-extend-3.2 dealii-8.4.1 "$WERCKER_OUTPUT_DIR"
+        code: |
+            cp -r foam-extend-3.2 dealii-8.4.1 /home/
+            cd /home/
+            echo "export FOAM_INST_DIR=`pwd`" >> foam-extend-3.2/etc/prefs.sh
+    - script:
+        name: cleanup
+        code: rm -rf *
     - internal/docker-push:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
         repository: davidsblom/foam-fsi
         registry: https://registry.hub.docker.com
-    - script:
-        name: cleanup
-        code: rm -rf *
