@@ -144,6 +144,9 @@ build:
 
             make -j $WM_NCOMPPROCS && make install && make test
             rm -rf build
+    - script:
+        name: copy to output dir
+        code: cp -r foam-extend-3.2 dealii-8.4.1 "$WERCKER_OUTPUT_DIR"
     - internal/docker-push:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
