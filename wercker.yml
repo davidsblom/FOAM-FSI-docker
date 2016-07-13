@@ -14,7 +14,7 @@ build:
     - script:
         name: download foam-extend-3.2
         code: |
-            git clone git://git.code.sf.net/p/foam-extend/foam-extend-3.2
+            git clone https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-3.2
     - script:
         name: configuration
         code: |
