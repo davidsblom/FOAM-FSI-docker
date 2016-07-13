@@ -151,6 +151,7 @@ dealii:
                 ..
 
             make -j $WM_NCOMPPROCS && make install && make test
+            cd ..
             rm -rf build
     - script:
         name: copy to output dir
