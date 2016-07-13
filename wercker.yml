@@ -158,8 +158,8 @@ dealii:
     - script:
         name: copy to output dir
         code: |
-            cp -r foam-extend-3.2 dealii-8.4.1 "$WERCKER_OUTPUT_DIR"
-            cd $WERCKER_OUTPUT_DIR
+            cp -r foam-extend-3.2 dealii-8.4.1 /home/
+            cd /home/
             echo "export FOAM_INST_DIR=`pwd`" >> foam-extend-3.2/etc/prefs.sh
     - script:
         name: cleanup
