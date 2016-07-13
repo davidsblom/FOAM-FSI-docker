@@ -157,7 +157,10 @@ dealii:
             rm -rf build
     - script:
         name: copy to output dir
-        code: cp -r foam-extend-3.2 dealii-8.4.1 "$WERCKER_OUTPUT_DIR"
+        code: |
+            cp -r foam-extend-3.2 dealii-8.4.1 "$WERCKER_OUTPUT_DIR"
+            cd $WERCKER_OUTPUT_DIR
+            echo "export FOAM_INST_DIR=`pwd`" >> foam-extend-3.2/etc/prefs.sh
     - internal/docker-push:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
