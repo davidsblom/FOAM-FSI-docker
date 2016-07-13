@@ -124,40 +124,31 @@ build:
             cd foam-extend-3.2
             find . -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
             find . -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
+    - script:
+        name: deal.II
+        code: |
+            source foam-extend-3.2/etc/prefs.sh
+            source foam-extend-3.2/etc/bashrc
 
-dealii:
-    steps:
-        - script:
-            name: install dependencies
-            code: |
-                sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
-                apt-get -qq update
-                apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev
-        - script:
-            name: compile
-            code: |
-                source foam-extend-3.2/etc/prefs.sh
-                source foam-extend-3.2/etc/bashrc
+            export DEALII_VERSION=8.4.1
+            wget https://github.com/dealii/dealii/releases/download/v${DEALII_VERSION}/dealii-${DEALII_VERSION}.tar.gz
+            tar xf dealii-${DEALII_VERSION}.tar.gz
+            rm dealii-${DEALII_VERSION}.tar.gz
 
-                export DEALII_VERSION=8.4.1
-                wget https://github.com/dealii/dealii/releases/download/v${DEALII_VERSION}/dealii-${DEALII_VERSION}.tar.gz
-                tar xf dealii-${DEALII_VERSION}.tar.gz
-                rm dealii-${DEALII_VERSION}.tar.gz
+            cd dealii-${DEALII_VERSION} && mkdir build bin && cd build
+            cmake -DDEAL_II_WITH_MPI=ON \
+                -DDEAL_II_COMPONENT_EXAMPLES=OFF \
+                -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
+                -DCMAKE_BUILD_TYPE=Release \
+                ..
 
-                cd dealii-${DEALII_VERSION} && mkdir build bin && cd build
-                cmake -DDEAL_II_WITH_MPI=ON \
-                    -DDEAL_II_COMPONENT_EXAMPLES=OFF \
-                    -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
-                    -DCMAKE_BUILD_TYPE=Release \
-                    ..
-
-                make -j $WM_NCOMPPROCS && make install && make test
-                rm -rf build
-        - internal/docker-push:
-            username: $DOCKER_USERNAME
-            password: $DOCKER_PASSWORD
-            repository: davidsblom/foam-fsi
-            registry: https://registry.hub.docker.com
-        - script:
-            name: cleanup
-            code: rm -rf *
+            make -j $WM_NCOMPPROCS && make install && make test
+            rm -rf build
+    - internal/docker-push:
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        repository: davidsblom/foam-fsi
+        registry: https://registry.hub.docker.com
+    - script:
+        name: cleanup
+        code: rm -rf *
