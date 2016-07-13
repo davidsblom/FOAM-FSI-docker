@@ -127,8 +127,7 @@ build:
     - script:
         name: deal.II
         code: |
-            source foam-extend-3.2/etc/prefs.sh
-            source foam-extend-3.2/etc/bashrc
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc && cd ..
 
             export DEALII_VERSION=8.4.1
             wget https://github.com/dealii/dealii/releases/download/v${DEALII_VERSION}/dealii-${DEALII_VERSION}.tar.gz
