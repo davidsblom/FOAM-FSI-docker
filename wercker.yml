@@ -161,11 +161,11 @@ dealii:
             cp -r foam-extend-3.2 dealii-8.4.1 "$WERCKER_OUTPUT_DIR"
             cd $WERCKER_OUTPUT_DIR
             echo "export FOAM_INST_DIR=`pwd`" >> foam-extend-3.2/etc/prefs.sh
+    - script:
+        name: cleanup
+        code: rm -rf *
     - internal/docker-push:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
         repository: davidsblom/foam-fsi
         registry: https://registry.hub.docker.com
-    - script:
-        name: cleanup
-        code: rm -rf *
