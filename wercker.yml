@@ -123,6 +123,12 @@ build:
             cd foam-extend-3.2
             find . -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
             find . -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
+    - script:
+        name: create archive
+        code: |
+            echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
+            tar -czf foam-extend-3.2.tar.gz foam-extend-3.2
+            rm -rf foam-extend-3.2
 
 dealii:
   steps:
@@ -153,8 +159,7 @@ dealii:
     - script:
         name: copy to output dir
         code: |
-            echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
-            tar -czf /home/foam-extend-3.2.tar.gz foam-extend-3.2
+            mv foam-extend-3.2.tar.gz /home/
             tar -czf /home/dealii-8.4.1.tar.gz dealii-8.4.1
     - script:
         name: cleanup
