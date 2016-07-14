@@ -128,15 +128,6 @@ build:
         code: |
             echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
             tar -czf /home/foam-extend-3.2.tar.gz foam-extend-3.2
-
-dealii:
-  steps:
-    - script:
-        name: install dependencies
-        code: |
-            sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
-            apt-get -qq update
-            apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev
     - script:
         name: deal.II
         code: |
@@ -159,7 +150,10 @@ dealii:
             rm -rf build
     - script:
         name: copy to output dir
-        code: tar -czf /home/dealii-8.4.1.tar.gz dealii-8.4.1
+        code: |
+            echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
+            tar -czf /home/foam-extend-3.2.tar.gz foam-extend-3.2
+            tar -czf /home/dealii-8.4.1.tar.gz dealii-8.4.1
     - script:
         name: cleanup
         code: rm -rf *
