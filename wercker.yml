@@ -121,6 +121,7 @@ build:
         name: cleanup build files
         code: |
             cd foam-extend-3.2
+            rm -rf .git
             find . -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
             find . -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
     - script:
