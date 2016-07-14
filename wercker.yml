@@ -123,11 +123,18 @@ build:
             cd foam-extend-3.2
             find . -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
             find . -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
+
+dealii:
+  steps:
+    - script:
+        name: install dependencies
+        code: |
+            sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
+            apt-get -qq update
+            apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev
     - script:
         name: deal.II
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc && cd ..
-
             export DEALII_VERSION=8.4.1
             wget https://github.com/dealii/dealii/releases/download/v${DEALII_VERSION}/dealii-${DEALII_VERSION}.tar.gz
             tar xf dealii-${DEALII_VERSION}.tar.gz
@@ -140,7 +147,7 @@ build:
                 -DCMAKE_BUILD_TYPE=Release \
                 ..
 
-            make -j $WM_NCOMPPROCS && make install && make test
+            make -j `nproc` && make install && make test
             cd ..
             rm -rf build
     - script:
