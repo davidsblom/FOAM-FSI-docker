@@ -170,6 +170,17 @@ dealii:
           export BOOST_VERSION_DOT=1.55.0
           wget -O boost_${BOOST_VERSION}.tar.bz2 http://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION_DOT}/boost_${BOOST_VERSION}.tar.bz2
     - script:
+        name: googletest
+        code: |
+          cd /home
+          VERSION=1.7.0
+          wget -O gtest-${VERSION}.zip http://googletest.googlecode.com/files/gtest-${VERSION}.zip
+          unzip gtest-${VERSION}
+          rm gtest-${VERSION}.zip
+          cd gtest-${VERSION}
+          cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CC_COMPILER=gcc
+          make -j `nprocs`
+    - script:
         name: cleanup
         code: rm -rf *
     - internal/docker-push:
