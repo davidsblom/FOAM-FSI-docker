@@ -142,7 +142,7 @@ dealii:
         name: deal.II
         code: |
             cd /home
-            wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar x -C ./
+            wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz -C ./
 
             cd dealii-8.4.1 && mkdir build bin && cd build
             cmake -DDEAL_II_WITH_MPI=ON \
@@ -166,15 +166,15 @@ dealii:
         name: googletest
         code: |
           cd /home
-          wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar x -C ./
-          cd gtest-1.7.0
+          wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar xz -C ./
+          cd googletest-release-1.7.0
           cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CC_COMPILER=gcc
           make -j `nprocs`
     - script:
         name: yaml-cpp
         code: |
           cd /home
-          wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar x -C ./
+          wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz -C ./
           export BOOST_ROOT=/home/boost_1_55_0
           cd yaml-cpp-release-0.5.3
           mkdir build && cd build
