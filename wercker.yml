@@ -181,6 +181,21 @@ dealii:
           cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CC_COMPILER=gcc
           make -j `nprocs`
     - script:
+        name: yaml-cpp
+        code: |
+          cd /home
+          VERSION=0.5.3
+          BOOST_VERSION=1_55_0
+          wget -O yaml-cpp-${VERSION}.tar.gz https://github.com/jbeder/yaml-cpp/archive/release-${VERSION}.tar.gz
+          tar xf yaml-cpp-${VERSION}.tar.gz
+          rm yaml-cpp-${VERSION}.tar.gz
+          export BOOST_ROOT=/home/boost_${BOOST_VERSION}
+          cd yaml-cpp-release-${VERSION}
+          mkdir build
+          cd build
+          CC=gcc CXX=g++ cmake -DBUILD_SHARED_LIBS=ON -DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT=${BOOST_ROOT} ..
+          make -j `nprocs`
+    - script:
         name: cleanup
         code: rm -rf *
     - internal/docker-push:
