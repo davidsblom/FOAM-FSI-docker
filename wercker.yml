@@ -141,12 +141,10 @@ dealii:
     - script:
         name: deal.II
         code: |
-            export DEALII_VERSION=8.4.1
-            wget https://github.com/dealii/dealii/releases/download/v${DEALII_VERSION}/dealii-${DEALII_VERSION}.tar.gz
-            tar xf dealii-${DEALII_VERSION}.tar.gz
-            rm dealii-${DEALII_VERSION}.tar.gz
+            cd /home
+            wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar x -C ./
 
-            cd dealii-${DEALII_VERSION} && mkdir build bin && cd build
+            cd dealii-8.4.1 && mkdir build bin && cd build
             cmake -DDEAL_II_WITH_MPI=ON \
                 -DDEAL_II_COMPONENT_EXAMPLES=OFF \
                 -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
@@ -158,46 +156,30 @@ dealii:
             rm -rf build
     - script:
         name: copy to output dir
-        code: |
-            mv foam-extend-3.2.tar.gz /home/
-            tar -czf /home/dealii-8.4.1.tar.gz dealii-8.4.1
-            rm -rf dealii-8.4.1
+        code: mv foam-extend-3.2.tar.gz /home/
     - script:
         name: boost
         code: |
           cd /home
-          export BOOST_VERSION=1_55_0
-          export BOOST_VERSION_DOT=1.55.0
-          wget -O boost_${BOOST_VERSION}.tar.bz2 http://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION_DOT}/boost_${BOOST_VERSION}.tar.bz2
+          wget http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.tar.bz2 -O - | tar x -C ./
     - script:
         name: googletest
         code: |
           cd /home
-          VERSION=1.7.0
-          wget -O gtest-${VERSION}.zip http://googletest.googlecode.com/files/gtest-${VERSION}.zip
-          unzip gtest-${VERSION}
-          rm gtest-${VERSION}.zip
-          cd gtest-${VERSION}
+          wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar x -C ./
+          cd gtest-1.7.0
           cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CC_COMPILER=gcc
           make -j `nprocs`
     - script:
         name: yaml-cpp
         code: |
           cd /home
-          VERSION=0.5.3
-          BOOST_VERSION=1_55_0
-          wget -O yaml-cpp-${VERSION}.tar.gz https://github.com/jbeder/yaml-cpp/archive/release-${VERSION}.tar.gz
-          tar xf yaml-cpp-${VERSION}.tar.gz
-          rm yaml-cpp-${VERSION}.tar.gz
-          export BOOST_ROOT=/home/boost_${BOOST_VERSION}
-          cd yaml-cpp-release-${VERSION}
-          mkdir build
-          cd build
+          wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar x -C ./
+          export BOOST_ROOT=/home/boost_1_55_0
+          cd yaml-cpp-release-0.5.3
+          mkdir build && cd build
           CC=gcc CXX=g++ cmake -DBUILD_SHARED_LIBS=ON -DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT=${BOOST_ROOT} ..
           make -j `nprocs`
-    - script:
-        name: cleanup
-        code: rm -rf *
     - internal/docker-push:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
