@@ -205,7 +205,7 @@ debug:
         code: |
             sed -i s/"CC          = g++ -m64"/"CC          = mpicxx -m64"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++
             sed -i s/"c++OPT      = -O3"/"c++OPT      = -O3 -DNDEBUG"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Opt
-            sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -g -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN --coverage -fprofile-arcs -ftest-coverage"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Debug
+            sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Debug
 
             settings=foam-extend-3.2/etc/prefs.sh
             echo "#!/bin/bash" >> $settings
