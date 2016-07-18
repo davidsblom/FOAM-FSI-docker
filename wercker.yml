@@ -12,19 +12,19 @@ build:
             apt-get -qq update
             apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev
     - script:
-        name: download foam-extend-3.2
+        name: download foam-extend-4.0
         code: |
-            git clone https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-3.2
-            cd foam-extend-3.2
+            git clone -b nextRelease https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-4.0
+            cd foam-extend-4.0
             rm -rf tutorials applications .git
     - script:
         name: configuration
         code: |
-            sed -i s/"CC          = g++ -m64"/"CC          = mpicxx -m64"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++
-            sed -i s/"c++OPT      = -O3"/"c++OPT      = -O3 -DNDEBUG"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Opt
-            sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -g -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN --coverage -fprofile-arcs -ftest-coverage"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Debug
+            sed -i s/"CC          = g++ -m64"/"CC          = mpicxx -m64"/g foam-extend-4.0/wmake/rules/linux64Gcc/c++
+            sed -i s/"c++OPT      = -O3"/"c++OPT      = -O3 -DNDEBUG"/g foam-extend-4.0/wmake/rules/linux64Gcc/c++Opt
+            sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -g -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN --coverage -fprofile-arcs -ftest-coverage"/g foam-extend-4.0/wmake/rules/linux64Gcc/c++Debug
 
-            settings=foam-extend-3.2/etc/prefs.sh
+            settings=foam-extend-4.0/etc/prefs.sh
             echo "#!/bin/bash" >> $settings
             echo "export FOAM_INST_DIR=`pwd`" >> $settings
             echo "export PARAVIEW_SYSTEM=1" >> $settings
@@ -55,7 +55,7 @@ build:
     - script:
         name: third-party packages
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             # wmake is required for subsequent targets
             ( cd wmake/src && make )
@@ -65,7 +65,7 @@ build:
     - script:
         name: foam-extend libraries-1
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmakePrintBuild -check || /bin/rm -f foam/Make/$WM_OPTIONS/global.? 2>/dev/null
@@ -79,7 +79,7 @@ build:
     - script:
         name: foam-extend libraries-2
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmake libso lagrangian/basic
@@ -92,7 +92,7 @@ build:
     - script:
         name: foam-extend libraries-3
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmake libso tetFiniteElement
@@ -104,7 +104,7 @@ build:
     - script:
         name: foam-extend libraries-4
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             thermophysicalModels/Allwmake
@@ -114,21 +114,21 @@ build:
     - script:
         name: foam-extend libraries-5
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src && wmake libso solidModels
     - script:
         name: cleanup build files
         code: |
-            cd foam-extend-3.2
+            cd foam-extend-4.0
             find . -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
             find . -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
     - script:
         name: create archive
         code: |
-            echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
-            tar -czf foam-extend-3.2.tar.gz foam-extend-3.2
-            rm -rf foam-extend-3.2
+            echo "export FOAM_INST_DIR=/home" >> foam-extend-4.0/etc/prefs.sh
+            tar -czf foam-extend-4.0.tar.gz foam-extend-4.0
+            rm -rf foam-extend-4.0
 
 dealii:
   steps:
@@ -156,7 +156,7 @@ dealii:
             rm -rf build
     - script:
         name: copy to output dir
-        code: mv foam-extend-3.2.tar.gz /home/
+        code: mv foam-extend-4.0.tar.gz /home/
     - script:
         name: boost
         code: |
@@ -185,6 +185,7 @@ dealii:
         password: $DOCKER_PASSWORD
         repository: davidsblom/foam-fsi
         registry: https://registry.hub.docker.com
+        tag: build-foam-extend-4.0
 
 debug:
   steps:
@@ -195,19 +196,19 @@ debug:
             apt-get -qq update
             apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev
     - script:
-        name: download foam-extend-3.2
+        name: download foam-extend-4.0
         code: |
-            git clone https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-3.2
-            cd foam-extend-3.2
+            git clone -b nextRelease https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-4.0
+            cd foam-extend-4.0
             rm -rf tutorials applications .git
     - script:
         name: configuration
         code: |
-            sed -i s/"CC          = g++ -m64"/"CC          = mpicxx -m64"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++
-            sed -i s/"c++OPT      = -O3"/"c++OPT      = -O3 -DNDEBUG"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Opt
-            sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Debug
+            sed -i s/"CC          = g++ -m64"/"CC          = mpicxx -m64"/g foam-extend-4.0/wmake/rules/linux64Gcc/c++
+            sed -i s/"c++OPT      = -O3"/"c++OPT      = -O3 -DNDEBUG"/g foam-extend-4.0/wmake/rules/linux64Gcc/c++Opt
+            sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN"/g foam-extend-4.0/wmake/rules/linux64Gcc/c++Debug
 
-            settings=foam-extend-3.2/etc/prefs.sh
+            settings=foam-extend-4.0/etc/prefs.sh
             echo "#!/bin/bash" >> $settings
             echo "export FOAM_INST_DIR=`pwd`" >> $settings
             echo "export PARAVIEW_SYSTEM=1" >> $settings
@@ -239,7 +240,7 @@ debug:
     - script:
         name: third-party packages
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             # wmake is required for subsequent targets
             ( cd wmake/src && make )
@@ -249,7 +250,7 @@ debug:
     - script:
         name: foam-extend libraries-1
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmakePrintBuild -check || /bin/rm -f foam/Make/$WM_OPTIONS/global.? 2>/dev/null
@@ -263,7 +264,7 @@ debug:
     - script:
         name: foam-extend libraries-2
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmake libso lagrangian/basic
@@ -276,7 +277,7 @@ debug:
     - script:
         name: foam-extend libraries-3
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             wmake libso tetFiniteElement
@@ -288,7 +289,7 @@ debug:
     - script:
         name: foam-extend libraries-4
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src
             thermophysicalModels/Allwmake
@@ -298,21 +299,21 @@ debug:
     - script:
         name: foam-extend libraries-5
         code: |
-            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+            cd foam-extend-4.0 && source etc/prefs.sh && source etc/bashrc
 
             cd src && wmake libso solidModels
     - script:
         name: cleanup build files
         code: |
-            cd foam-extend-3.2
+            cd foam-extend-4.0
             find . -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
             find . -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
     - script:
         name: create archive
         code: |
-            echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
-            tar -czf foam-extend-3.2.tar.gz foam-extend-3.2
-            rm -rf foam-extend-3.2
+            echo "export FOAM_INST_DIR=/home" >> foam-extend-4.0/etc/prefs.sh
+            tar -czf foam-extend-4.0.tar.gz foam-extend-4.0
+            rm -rf foam-extend-4.0
 
 dealii-debug:
   steps:
@@ -340,7 +341,7 @@ dealii-debug:
             rm -rf build
     - script:
         name: copy to output dir
-        code: mv foam-extend-3.2.tar.gz /home/
+        code: mv foam-extend-4.0.tar.gz /home/
     - script:
         name: boost
         code: |
@@ -368,5 +369,5 @@ dealii-debug:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
         repository: davidsblom/foam-fsi
-        tag: debug
+        tag: debug-foam-extend-4.0
         registry: https://registry.hub.docker.com
