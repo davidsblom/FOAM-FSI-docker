@@ -33,7 +33,6 @@ build:
             echo "export SCOTCH_SYSTEM=1" >> $settings
             echo "export SCOTCH_INCLUDE_DIR=/usr/include/scotch" >> $settings
             echo "export SCOTCH_LIB_DIR=/usr/lib" >> $settings
-            echo "export PYFOAM_SYSTEM=1" >> $settings
             echo "export METIS_SYSTEM=1" >> $settings
             echo "export METIS_INCLUDE_DIR=/usr/include" >> $settings
             echo "export METIS_LIB_DIR=/usr/lib" >> $settings
@@ -50,7 +49,6 @@ build:
             echo "unset WM_THIRD_PARTY_USE_CMAKE_322" >> $settings
             echo "unset WM_THIRD_PARTY_USE_HWLOC_1101" >> $settings
             echo "unset WM_THIRD_PARTY_USE_SCOTCH_604" >> $settings
-            echo "unset WM_THIRD_PARTY_USE_PYFOAM_064" >> $settings
             cat $settings
     - script:
         name: third-party packages
@@ -216,7 +214,6 @@ debug:
             echo "export SCOTCH_SYSTEM=1" >> $settings
             echo "export SCOTCH_INCLUDE_DIR=/usr/include/scotch" >> $settings
             echo "export SCOTCH_LIB_DIR=/usr/lib" >> $settings
-            echo "export PYFOAM_SYSTEM=1" >> $settings
             echo "export METIS_SYSTEM=1" >> $settings
             echo "export METIS_INCLUDE_DIR=/usr/include" >> $settings
             echo "export METIS_LIB_DIR=/usr/lib" >> $settings
@@ -233,7 +230,6 @@ debug:
             echo "unset WM_THIRD_PARTY_USE_CMAKE_322" >> $settings
             echo "unset WM_THIRD_PARTY_USE_HWLOC_1101" >> $settings
             echo "unset WM_THIRD_PARTY_USE_SCOTCH_604" >> $settings
-            echo "unset WM_THIRD_PARTY_USE_PYFOAM_064" >> $settings
             echo "export WM_COMPILE_OPTION=Debug" >> $settings
             cat $settings
     - script:
