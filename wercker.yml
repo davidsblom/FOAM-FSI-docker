@@ -131,6 +131,7 @@ build:
             (cd applications/utilities/mesh/manipulation/renumberMesh && wmake)
             (cd applications/utilities/mesh/manipulation/checkMesh && wmake)
             (cd applications/utilities/parallelProcessing/decomposePar && wmake)
+            (cd applications/utilities/parallelProcessing/reconstructPar && wmake)
     - script:
         name: cleanup build files
         code: |
