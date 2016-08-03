@@ -107,10 +107,16 @@ build:
             cd src
             thermophysicalModels/Allwmake
             transportModels/Allwmake
+    - script:
+        name: foam-extend libraries-5
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            cd src
             turbulenceModels/Allwmake
             lagrangian/Allwmake
     - script:
-        name: foam-extend libraries-5
+        name: foam-extend libraries-6
         code: |
             cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
