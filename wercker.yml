@@ -126,6 +126,7 @@ build:
         code: |
             cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
 
+            (cd src/postProcessing && ./Allwmake)
             (cd src/mesh/blockMesh && wmake libso)
             (cd applications/utilities/mesh/generation/blockMesh && wmake)
             (cd applications/utilities/mesh/manipulation/renumberMesh && wmake)
