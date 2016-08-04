@@ -151,6 +151,7 @@ dealii:
     - script:
         name: deal.II
         code: |
+            mv foam-extend-3.2.tar.gz /home/
             cd /home
             tar xf foam-extend-3.2.tar.gz && rm -f foam-extend-3.2.tar.gz
             (cd /home/foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc)
@@ -169,9 +170,7 @@ dealii:
             make -j `nproc` && make install && make test
             cd ..
             rm -rf build
-    - script:
-        name: copy to output dir
-        code: mv foam-extend-3.2.tar.gz /home/
+        code:
     - script:
         name: boost
         code: |
