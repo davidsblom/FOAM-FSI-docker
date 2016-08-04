@@ -10,7 +10,7 @@ build:
         code: |
             sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
             apt-get -qq update
-            apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev
+            apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev
     - script:
         name: download foam-extend-3.2
         code: |
@@ -33,12 +33,6 @@ build:
             echo "export SCOTCH_SYSTEM=1" >> $settings
             echo "export SCOTCH_INCLUDE_DIR=/usr/include/scotch" >> $settings
             echo "export SCOTCH_LIB_DIR=/usr/lib" >> $settings
-            echo "export METIS_SYSTEM=1" >> $settings
-            echo "export METIS_INCLUDE_DIR=/usr/include" >> $settings
-            echo "export METIS_LIB_DIR=/usr/lib" >> $settings
-            echo "export PARMETIS_SYSTEM=1" >> $settings
-            echo "export PARMETIS_INCLUDE_DIR=/usr/include" >> $settings
-            echo "export PARMETIS_LIB_DIR=/usr/lib" >> $settings
             echo "export CUDA_IGNORE=1" >> $settings
             echo "export SWAK4FOAM_SYSTEM=1" >> $settings
             echo "export PARMGRIDGEN_SYSTEM=1" >> $settings
@@ -153,15 +147,19 @@ dealii:
         code: |
             sed -i "s/jessie main/jessie main contrib non-free/" /etc/apt/sources.list
             apt-get -qq update
-            apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev libparmetis-dev python-yaml
+            apt-get install -y git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev python-yaml
     - script:
         name: deal.II
         code: |
             cd /home
+            tar xf foam-extend-3.2.tar.gz && rm -f foam-extend-3.2.tar.gz
+            (cd /home/foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc)
+
             wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
 
             cd dealii-8.4.1 && mkdir build bin && cd build
             cmake -DDEAL_II_WITH_MPI=ON \
+                -DEAL_II_WITH_METIS=ON \
                 -DDEAL_II_COMPONENT_EXAMPLES=OFF \
                 -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
                 -DCMAKE_BUILD_TYPE=Release \
