@@ -159,7 +159,7 @@ dealii:
         code: |
             mv foam-extend-3.2.tar.gz /home/
             cd /home
-            tar xf foam-extend-3.2.tar.gz && rm -f foam-extend-3.2.tar.gz
+            tar xf foam-extend-3.2.tar.gz
             (cd /home/foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc)
 
             wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
@@ -175,7 +175,7 @@ dealii:
 
             make -j `nproc` && make install && make test
             cd ..
-            rm -rf build
+            rm -rf build /home/foam-extend-3.2
         code:
     - script:
         name: boost
