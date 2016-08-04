@@ -33,12 +33,6 @@ build:
             echo "export SCOTCH_SYSTEM=1" >> $settings
             echo "export SCOTCH_INCLUDE_DIR=/usr/include/scotch" >> $settings
             echo "export SCOTCH_LIB_DIR=/usr/lib" >> $settings
-            echo "export METIS_SYSTEM=1" >> $settings
-            echo "export METIS_INCLUDE_DIR=/usr/include" >> $settings
-            echo "export METIS_LIB_DIR=/usr/lib" >> $settings
-            echo "export PARMETIS_SYSTEM=1" >> $settings
-            echo "export PARMETIS_INCLUDE_DIR=/usr/include" >> $settings
-            echo "export PARMETIS_LIB_DIR=/usr/lib" >> $settings
             echo "export CUDA_IGNORE=1" >> $settings
             echo "export SWAK4FOAM_SYSTEM=1" >> $settings
             echo "export PARMGRIDGEN_SYSTEM=1" >> $settings
@@ -166,8 +160,8 @@ dealii:
 
             cd dealii-8.4.1 && mkdir build bin && cd build
             cmake -DDEAL_II_WITH_MPI=ON \
-                -DEAL_II_WITH_METIS=ON \
-                -DEAL_II_WITH_PETSC=ON \
+                -DDEAL_II_WITH_METIS=ON \
+                -DDEAL_II_WITH_PETSC=ON \
                 -DDEAL_II_COMPONENT_EXAMPLES=OFF \
                 -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
                 -DCMAKE_BUILD_TYPE=Release \
