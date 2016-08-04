@@ -176,7 +176,6 @@ dealii:
             make -j `nproc` && make install && make test
             cd ..
             rm -rf build /home/foam-extend-3.2
-        code:
     - script:
         name: boost
         code: |
