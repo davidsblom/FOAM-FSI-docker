@@ -408,6 +408,7 @@ build-ubuntu:
         code: |
             git clone http://git.code.sf.net/p/foam-extend/foam-extend-3.2 foam-extend-3.2
             cd foam-extend-3.2
+            find src applications -name "*.L" -type f | xargs sed -i -e 's=\(YY\_FLEX\_SUBMINOR\_VERSION\)=YY_FLEX_MINOR_VERSION < 6 \&\& \1='
             rm -rf tutorials .git
     - script:
         name: configuration
