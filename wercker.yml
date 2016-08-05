@@ -160,6 +160,7 @@ dealii:
     - script:
         name: compile deal.II
         code: |
+            cd /home
             wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
 
             cd dealii-8.4.1 && mkdir build bin && cd build
