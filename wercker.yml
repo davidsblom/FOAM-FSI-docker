@@ -33,6 +33,9 @@ build:
             echo "export SCOTCH_SYSTEM=1" >> $settings
             echo "export SCOTCH_INCLUDE_DIR=/usr/include/scotch" >> $settings
             echo "export SCOTCH_LIB_DIR=/usr/lib" >> $settings
+            echo "export PARMETIS_SYSTEM=1" >> $settings
+            echo "export PARMETIS_INCLUDE_DIR=/usr/include" >> $settings
+            echo "export PARMETIS_LIB_DIR=/usr/lib" >> $settings
             echo "export CUDA_IGNORE=1" >> $settings
             echo "export SWAK4FOAM_SYSTEM=1" >> $settings
             echo "export PARMGRIDGEN_SYSTEM=1" >> $settings
