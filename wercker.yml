@@ -139,6 +139,7 @@ build:
             cd foam-extend-3.2
             find . -not -path './applications/bin/linux64GccDPOpt' -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
             find . -not -path './applications/bin/linux64GccDPDebug' -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
+            rm -rf ThirdParty/rpmBuild/BUILD applications/solvers applications/utilities
     - script:
         name: create archive
         code: |
