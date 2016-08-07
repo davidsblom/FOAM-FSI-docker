@@ -339,7 +339,10 @@ dealii-debug:
         code: |
             sed -i "s/httpredir/ftp.us/" /etc/apt/sources.list
             apt-get clean && apt-get update
-            apt-get install -y --no-install-recommends ca-certificates git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev
+            apt-get install -y --no-install-recommends ca-certificates git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind petsc-dev libmetis-dev python-yaml
+    - script:
+        name: initialize foam-extend
+        code: mv foam-extend-3.2.tar.gz /home/
     - script:
         name: deal.II
         code: |
@@ -348,7 +351,10 @@ dealii-debug:
 
             cd dealii-8.4.1 && mkdir build bin && cd build
             cmake -DDEAL_II_WITH_MPI=ON \
+                -DDEAL_II_WITH_METIS=ON \
+                -DDEAL_II_WITH_PETSC=ON \
                 -DDEAL_II_COMPONENT_EXAMPLES=OFF \
+                -DMETIS_INCLUDE_DIR=/usr/include \
                 -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
                 -DCMAKE_BUILD_TYPE=Debug \
                 ..
@@ -356,9 +362,6 @@ dealii-debug:
             make -j `nproc` && make install && make test
             cd ..
             rm -rf build
-    - script:
-        name: copy to output dir
-        code: mv foam-extend-3.2.tar.gz /home/
     - script:
         name: boost
         code: |
