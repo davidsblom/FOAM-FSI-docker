@@ -162,7 +162,7 @@ dealii:
         name: compile deal.II
         code: |
             cd /home
-            wget --no-check-certificate https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
+            wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
 
             cd dealii-8.4.1 && mkdir build bin && cd build
             cmake -DDEAL_II_WITH_MPI=ON \
@@ -186,7 +186,7 @@ dealii:
         name: compile googletest
         code: |
           cd /home
-          wget --no-check-certificate https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar xz
+          wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar xz
           cd googletest-release-1.7.0
           cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CC_COMPILER=gcc
           make -j `nproc`
@@ -194,7 +194,7 @@ dealii:
         name: compile yaml-cpp
         code: |
           cd /home
-          wget --no-check-certificate https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
+          wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
           export BOOST_ROOT=/home/boost_1_55_0
           cd yaml-cpp-release-0.5.3
           mkdir build && cd build
@@ -344,7 +344,7 @@ dealii-debug:
         name: deal.II
         code: |
             cd /home
-            wget --no-check-certificate https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
+            wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
 
             cd dealii-8.4.1 && mkdir build bin && cd build
             cmake -DDEAL_II_WITH_MPI=ON \
@@ -368,7 +368,7 @@ dealii-debug:
         name: googletest
         code: |
           cd /home
-          wget --no-check-certificate https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar xz
+          wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar xz
           cd googletest-release-1.7.0
           cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CC_COMPILER=gcc
           make -j `nproc`
@@ -376,7 +376,7 @@ dealii-debug:
         name: yaml-cpp
         code: |
           cd /home
-          wget --no-check-certificate https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
+          wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
           export BOOST_ROOT=/home/boost_1_55_0
           cd yaml-cpp-release-0.5.3
           mkdir build && cd build
@@ -549,7 +549,7 @@ dealii-ubuntu:
         name: compile deal.II
         code: |
             cd /home
-            wget --no-check-certificate https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
+            wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
 
             cd dealii-8.4.1 && mkdir build bin && cd build
             cmake -DDEAL_II_WITH_MPI=ON \
@@ -573,7 +573,7 @@ dealii-ubuntu:
         name: compile googletest
         code: |
           cd /home
-          wget --no-check-certificate https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar xz
+          wget https://github.com/google/googletest/archive/release-1.7.0.tar.gz -O - | tar xz
           cd googletest-release-1.7.0
           cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CC_COMPILER=gcc
           make -j `nproc`
@@ -581,7 +581,7 @@ dealii-ubuntu:
         name: compile yaml-cpp
         code: |
           cd /home
-          wget --no-check-certificate https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
+          wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
           export BOOST_ROOT=/home/boost_1_55_0
           cd yaml-cpp-release-0.5.3
           mkdir build && cd build
