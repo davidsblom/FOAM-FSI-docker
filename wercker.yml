@@ -181,6 +181,7 @@ dealii:
         code: |
           cd /home
           wget http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.tar.bz2 -O - | tar xj
+          cd boost_1_55_0 && ./bootstrap.sh --with-libraries=serialization && ./b2 -j `nproc`
     - script:
         name: compile googletest
         code: |
@@ -378,6 +379,7 @@ dealii-debug:
         code: |
           cd /home
           wget http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.tar.bz2 -O - | tar xj
+          cd boost_1_55_0 && ./bootstrap.sh --with-libraries=serialization && ./b2 -j `nproc`
     - script:
         name: googletest
         code: |
