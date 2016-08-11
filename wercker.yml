@@ -144,8 +144,7 @@ build:
         name: create archive
         code: |
             echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
-            tar -czf foam-extend-3.2.tar.gz foam-extend-3.2
-            rm -rf foam-extend-3.2
+            tar -czf $WERCKER_OUTPUT_DIR/foam-extend-3.2.tar.gz foam-extend-3.2
 
 dealii:
   steps:
@@ -342,8 +341,7 @@ debug:
         name: create archive
         code: |
             echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
-            tar -czf foam-extend-3.2.tar.gz foam-extend-3.2
-            rm -rf foam-extend-3.2
+            tar -czf $WERCKER_OUTPUT_DIR/foam-extend-3.2.tar.gz foam-extend-3.2
 
 dealii-debug:
   steps:
@@ -547,8 +545,7 @@ build-ubuntu:
         name: create archive
         code: |
             echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
-            tar -czf foam-extend-3.2.tar.gz foam-extend-3.2
-            rm -rf foam-extend-3.2
+            tar -czf $WERCKER_OUTPUT_DIR/foam-extend-3.2.tar.gz foam-extend-3.2
 
 dealii-ubuntu:
   box: ubuntu
