@@ -1,9 +1,10 @@
-box: debian
+box: debian:testing
 
 command-timeout: 60
 no-response-timeout: 30
 
 build:
+  box:
   steps:
     - script:
         name: install dependencies
