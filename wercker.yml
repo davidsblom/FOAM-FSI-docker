@@ -1,4 +1,4 @@
-box: debian
+box: debian:testing
 
 command-timeout: 60
 no-response-timeout: 30
@@ -16,6 +16,7 @@ build:
         code: |
             git clone https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-3.2
             cd foam-extend-3.2
+            find src applications -name "*.L" -type f | xargs sed -i -e 's=\(YY\_FLEX\_SUBMINOR\_VERSION\)=YY_FLEX_MINOR_VERSION < 6 \&\& \1='
             rm -rf tutorials .git
     - script:
         name: configuration
@@ -180,7 +181,7 @@ dealii:
         name: download boost
         code: |
           cd /home
-          wget http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.tar.bz2 -O - | tar xj
+          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
     - script:
         name: compile googletest
         code: |
@@ -194,7 +195,7 @@ dealii:
         code: |
           cd /home
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
-          export BOOST_ROOT=/home/boost_1_55_0
+          export BOOST_ROOT=/home/boost_1_61_0
           cd yaml-cpp-release-0.5.3
           mkdir build && cd build
           CC=gcc CXX=g++ cmake -DBUILD_SHARED_LIBS=ON -DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT=${BOOST_ROOT} ..
@@ -218,6 +219,7 @@ debug:
         code: |
             git clone https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-3.2
             cd foam-extend-3.2
+            find src applications -name "*.L" -type f | xargs sed -i -e 's=\(YY\_FLEX\_SUBMINOR\_VERSION\)=YY_FLEX_MINOR_VERSION < 6 \&\& \1='
             rm -rf tutorials .git
     - script:
         name: configuration
@@ -377,7 +379,7 @@ dealii-debug:
         name: boost
         code: |
           cd /home
-          wget http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.tar.bz2 -O - | tar xj
+          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
     - script:
         name: googletest
         code: |
@@ -391,7 +393,7 @@ dealii-debug:
         code: |
           cd /home
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
-          export BOOST_ROOT=/home/boost_1_55_0
+          export BOOST_ROOT=/home/boost_1_61_0
           cd yaml-cpp-release-0.5.3
           mkdir build && cd build
           CC=gcc CXX=g++ cmake -DBUILD_SHARED_LIBS=ON -DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT=${BOOST_ROOT} ..
@@ -581,7 +583,7 @@ dealii-ubuntu:
         name: download boost
         code: |
           cd /home
-          wget http://downloads.sourceforge.net/project/boost/boost/1.55.0/boost_1_55_0.tar.bz2 -O - | tar xj
+          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
     - script:
         name: compile googletest
         code: |
@@ -595,7 +597,7 @@ dealii-ubuntu:
         code: |
           cd /home
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
-          export BOOST_ROOT=/home/boost_1_55_0
+          export BOOST_ROOT=/home/boost_1_61_0
           cd yaml-cpp-release-0.5.3
           mkdir build && cd build
           CC=gcc CXX=g++ cmake -DBUILD_SHARED_LIBS=ON -DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT=${BOOST_ROOT} ..
