@@ -197,10 +197,12 @@ dealii:
             cd ..
             rm -rf build
     - script:
-        name: download boost
+        name: compile boost
         code: |
           cd /home
           wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
+          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
+          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options && ./b2 -j `nproc`
     - script:
         name: compile googletest
         code: |
@@ -414,10 +416,12 @@ dealii-debug:
             cd ..
             rm -rf build
     - script:
-        name: boost
+        name: compile boost
         code: |
           cd /home
           wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
+          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
+          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options && ./b2 -j `nproc`
     - script:
         name: googletest
         code: |
@@ -647,10 +651,12 @@ dealii-ubuntu:
             cd ..
             rm -rf build
     - script:
-        name: download boost
+        name: compile boost
         code: |
           cd /home
           wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
+          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
+          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options && ./b2 -j `nproc`
     - script:
         name: compile googletest
         code: |
