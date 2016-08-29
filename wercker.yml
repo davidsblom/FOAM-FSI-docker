@@ -202,9 +202,16 @@ dealii:
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
           export BOOST_ROOT=/home/boost_1_61_0
           cd yaml-cpp-release-0.5.3
-          mkdir build && cd build
-          CC=gcc CXX=g++ cmake -DBUILD_SHARED_LIBS=ON -DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT=${BOOST_ROOT} ..
-          make -j `nproc`
+          mkdir build install && cd build
+          CC=gcc CXX=g++ cmake \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBoost_NO_BOOST_CMAKE=TRUE \
+            -DBoost_NO_SYSTEM_PATHS=TRUE \
+            -DBOOST_ROOT=${BOOST_ROOT} \
+            -DCMAKE_INSTALL_PREFIX=`pwd`/../install \
+            ..
+          make -j `nproc` && make install && make test
+          cd .. && rm -rf build
     - internal/docker-push:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
@@ -399,15 +406,22 @@ dealii-debug:
           make -j `nproc` && make install && make test
           cd .. && rm -rf build
     - script:
-        name: yaml-cpp
+        name: compile yaml-cpp
         code: |
           cd /home
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
           export BOOST_ROOT=/home/boost_1_61_0
           cd yaml-cpp-release-0.5.3
-          mkdir build && cd build
-          CC=gcc CXX=g++ cmake -DBUILD_SHARED_LIBS=ON -DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT=${BOOST_ROOT} ..
-          make -j `nproc`
+          mkdir build install && cd build
+          CC=gcc CXX=g++ cmake \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBoost_NO_BOOST_CMAKE=TRUE \
+            -DBoost_NO_SYSTEM_PATHS=TRUE \
+            -DBOOST_ROOT=${BOOST_ROOT} \
+            -DCMAKE_INSTALL_PREFIX=`pwd`/../install \
+            ..
+          make -j `nproc` && make install && make test
+          cd .. && rm -rf build
     - internal/docker-push:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
@@ -614,9 +628,16 @@ dealii-ubuntu:
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
           export BOOST_ROOT=/home/boost_1_61_0
           cd yaml-cpp-release-0.5.3
-          mkdir build && cd build
-          CC=gcc CXX=g++ cmake -DBUILD_SHARED_LIBS=ON -DBoost_NO_BOOST_CMAKE=TRUE -DBoost_NO_SYSTEM_PATHS=TRUE -DBOOST_ROOT=${BOOST_ROOT} ..
-          make -j `nproc`
+          mkdir build install && cd build
+          CC=gcc CXX=g++ cmake \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBoost_NO_BOOST_CMAKE=TRUE \
+            -DBoost_NO_SYSTEM_PATHS=TRUE \
+            -DBOOST_ROOT=${BOOST_ROOT} \
+            -DCMAKE_INSTALL_PREFIX=`pwd`/../install \
+            ..
+          make -j `nproc` && make install && make test
+          cd .. && rm -rf build
     - internal/docker-push:
         username: $DOCKER_USERNAME
         password: $DOCKER_PASSWORD
