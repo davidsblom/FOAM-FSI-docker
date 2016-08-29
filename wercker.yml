@@ -231,7 +231,7 @@ dealii:
             -DBOOST_ROOT=${BOOST_ROOT} \
             -DCMAKE_INSTALL_PREFIX=`pwd`/../install \
             ..
-          make -j `nproc` && make install && make test
+          make -j `nproc` && make install
           cd .. && rm -rf build
     - internal/docker-push:
         username: $DOCKER_USERNAME
@@ -435,7 +435,7 @@ dealii-debug:
           sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
           cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options && ./b2 -j `nproc`
     - script:
-        name: googletest
+        name: compile googletest
         code: |
           cd /home
           wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz -O - | tar xz
@@ -462,7 +462,7 @@ dealii-debug:
             -DBOOST_ROOT=${BOOST_ROOT} \
             -DCMAKE_INSTALL_PREFIX=`pwd`/../install \
             ..
-          make -j `nproc` && make install && make test
+          make -j `nproc` && make install
           cd .. && rm -rf build
     - internal/docker-push:
         username: $DOCKER_USERNAME
@@ -709,7 +709,7 @@ dealii-ubuntu:
             -DBOOST_ROOT=${BOOST_ROOT} \
             -DCMAKE_INSTALL_PREFIX=`pwd`/../install \
             ..
-          make -j `nproc` && make install && make test
+          make -j `nproc` && make install
           cd .. && rm -rf build
     - internal/docker-push:
         username: $DOCKER_USERNAME
