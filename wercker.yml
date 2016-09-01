@@ -201,9 +201,7 @@ dealii:
                 --with-fc=mpif77 --with-debugging=0 \
                 --download-mumps --download-scalapack \
                 --download-fblaslapack --download-hypre \
-                --with-metis-include=/usr/include \
-                --with-metis-lib="-L /usr/lib/x86_64-linux-gnu/ -lmetis" \
-                --download-parmetis
+                --download-metis --download-parmetis
             make
             make test
     - script:
@@ -464,9 +462,7 @@ dealii-debug:
                 --with-fc=mpif77 --with-debugging=1 \
                 --download-mumps --download-scalapack \
                 --download-fblaslapack --download-hypre \
-                --with-metis-include=/usr/include \
-                --with-metis-lib="-L /usr/lib/x86_64-linux-gnu/ -lmetis" \
-                --download-parmetis
+                --download-metis --download-parmetis
             make
             make test
     - script:
@@ -733,9 +729,7 @@ dealii-ubuntu:
                 --with-fc=mpif77 --with-debugging=0 \
                 --download-mumps --download-scalapack \
                 --download-fblaslapack --download-hypre \
-                --with-metis-include=/usr/include \
-                --with-metis-lib="-L /usr/lib/x86_64-linux-gnu/ -lmetis" \
-                --download-parmetis
+                --download-metis --download-parmetis
             make
             make test
     - script:
