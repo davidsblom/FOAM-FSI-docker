@@ -154,7 +154,37 @@ dealii:
         code: |
             sed -i "s/httpredir/ftp.us/" /etc/apt/sources.list
             apt-get clean && apt-get update
-            apt-get install -y ca-certificates git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind python-yaml libmetis-dev libgfortran-5-dev libgcc-5-dev
+            apt-get install -y \
+              ca-certificates \
+              git \
+              build-essential \
+              flex \
+              bison \
+              zlib1g-dev \
+              libreadline-dev \
+              libncurses-dev \
+              libxt-dev \
+              libopenmpi-dev \
+              openmpi-bin \
+              rpm wget \
+              cmake \
+              hwloc \
+              scotch \
+              gfortran \
+              python \
+              unzip \
+              scons \
+              libiberty-dev \
+              libscotch-dev \
+              liblapack-dev \
+              libblas-dev \
+              cppcheck \
+              valgrind \
+              python-yaml \
+              libmetis-dev \
+              libgfortran-5-dev \
+              libgcc-5-dev \
+              libopenblas-dev
     - script:
         name: initialize foam-extend
         code: mv foam-extend-3.2.tar.gz /home/
@@ -171,7 +201,7 @@ dealii:
                 --with-fc=mpif77 --with-debugging=0 \
                 --download-mumps --download-scalapack \
                 --download-fblaslapack --download-hypre \
-                --download-metis --download-parmetis
+                --download-ptscotch
             make
             make test
     - script:
@@ -385,7 +415,37 @@ dealii-debug:
         code: |
             sed -i "s/httpredir/ftp.us/" /etc/apt/sources.list
             apt-get clean && apt-get update
-            apt-get install -y ca-certificates git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind libmetis-dev python-yaml libgfortran-5-dev libgcc-5-dev
+            apt-get install -y \
+              ca-certificates \
+              git \
+              build-essential \
+              flex \
+              bison \
+              zlib1g-dev \
+              libreadline-dev \
+              libncurses-dev \
+              libxt-dev \
+              libopenmpi-dev \
+              openmpi-bin \
+              rpm wget \
+              cmake \
+              hwloc \
+              scotch \
+              gfortran \
+              python \
+              unzip \
+              scons \
+              libiberty-dev \
+              libscotch-dev \
+              liblapack-dev \
+              libblas-dev \
+              cppcheck \
+              valgrind \
+              python-yaml \
+              libmetis-dev \
+              libgfortran-5-dev \
+              libgcc-5-dev \
+              libopenblas-dev
     - script:
         name: initialize foam-extend
         code: mv foam-extend-3.2.tar.gz /home/
@@ -402,7 +462,7 @@ dealii-debug:
                 --with-fc=mpif77 --with-debugging=1 \
                 --download-mumps --download-scalapack \
                 --download-fblaslapack --download-hypre \
-                --download-metis --download-parmetis
+                --download-ptscotch
             make
             make test
     - script:
@@ -622,17 +682,37 @@ dealii-ubuntu:
         name: install dependencies
         code: |
             apt-get clean && apt-get update
-            apt-get install -y ca-certificates git \
-                build-essential flex \
-                bison zlib1g-dev \
-                libreadline-dev libncurses-dev \
-                libxt-dev libopenmpi-dev \
-                openmpi-bin rpm wget cmake \
-                hwloc scotch gfortran python \
-                unzip scons libiberty-dev \
-                libscotch-dev liblapack-dev \
-                libblas-dev cppcheck valgrind \
-                python-yaml libmetis-dev
+            apt-get install -y \
+              ca-certificates \
+              git \
+              build-essential \
+              flex \
+              bison \
+              zlib1g-dev \
+              libreadline-dev \
+              libncurses5-dev \
+              libxt-dev \
+              libopenmpi-dev \
+              openmpi-bin \
+              rpm wget \
+              cmake \
+              hwloc \
+              scotch \
+              gfortran \
+              python \
+              unzip \
+              scons \
+              libiberty-dev \
+              libscotch-dev \
+              liblapack-dev \
+              libblas-dev \
+              cppcheck \
+              valgrind \
+              python-yaml \
+              libmetis-dev \
+              libgfortran-5-dev \
+              libgcc-5-dev \
+              libopenblas-dev
     - script:
         name: initialize foam-extend
         code: mv foam-extend-3.2.tar.gz /home/
@@ -649,7 +729,7 @@ dealii-ubuntu:
                 --with-fc=mpif77 --with-debugging=0 \
                 --download-mumps --download-scalapack \
                 --download-fblaslapack --download-hypre \
-                --download-metis --download-parmetis
+                --download-ptscotch
             make
             make test
     - script:
