@@ -773,8 +773,7 @@ dealii-ubuntu:
                 -DCMAKE_BUILD_TYPE=Release \
                 -DBOOST_DIR=/home/boost \
                 -DBOOST_LIBRARIES="${boost_lib_dir}/libboost_atomic.so;${boost_lib_dir}/libboost_chrono.so;${boost_lib_dir}/libboost_date_time.so;${boost_lib_dir}/libboost_filesystem.so;${boost_lib_dir}/libboost_log.so;${boost_lib_dir}/libboost_log_setup.so;${boost_lib_dir}/libboost_program_options.so;${boost_lib_dir}/libboost_regex.so;${boost_lib_dir}/libboost_serialization.so;${boost_lib_dir}/libboost_system.so;${boost_lib_dir}/libboost_thread.so;${boost_lib_dir}/libboost_wserialization.so" \
-                -DBOOST_INCLUDE_DIRS=/home/boost \
-                ..
+                -DBOOST_INCLUDE_DIRS=/home/boost
 
             make -j `nproc` && make install && make test
             cd ..
