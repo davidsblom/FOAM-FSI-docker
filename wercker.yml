@@ -205,6 +205,14 @@ dealii:
             make
             make test
     - script:
+        name: compile boost
+        code: |
+          cd /home
+          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
+          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
+          ln -s boost_1_61_0 boost
+          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options,serialization,thread && ./b2 -j `nproc`
+    - script:
         name: compile deal.II
         code: |
             cd /home
@@ -212,27 +220,24 @@ dealii:
 
             export PETSC_ARCH=x86_64
             export PETSC_DIR=/home/petsc-3.6.4
+            boost_lib_dir=/home/boost/stage/lib
 
             cd dealii-8.4.1 && mkdir build bin && cd build
-            cmake -DDEAL_II_WITH_MPI=ON \
+            cmake .. \
+                -DDEAL_II_WITH_MPI=ON \
                 -DDEAL_II_WITH_METIS=ON \
                 -DDEAL_II_WITH_PETSC=ON \
                 -DDEAL_II_COMPONENT_EXAMPLES=OFF \
                 -DMETIS_INCLUDE_DIR=/usr/include \
                 -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
                 -DCMAKE_BUILD_TYPE=Release \
-                ..
+                -DBOOST_DIR=/home/boost \
+                -DBOOST_LIBRARIES="${boost_lib_dir}/libboost_atomic.so;${boost_lib_dir}/libboost_chrono.so;${boost_lib_dir}/libboost_date_time.so;${boost_lib_dir}/libboost_filesystem.so;${boost_lib_dir}/libboost_log.so;${boost_lib_dir}/libboost_log_setup.so;${boost_lib_dir}/libboost_program_options.so;${boost_lib_dir}/libboost_regex.so;${boost_lib_dir}/libboost_serialization.so;${boost_lib_dir}/libboost_system.so;${boost_lib_dir}/libboost_thread.so;${boost_lib_dir}/libboost_wserialization.so" \
+                -DBOOST_INCLUDE_DIRS=/home/boost
 
             make -j `nproc` && make install && make test
             cd ..
             rm -rf build
-    - script:
-        name: compile boost
-        code: |
-          cd /home
-          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
-          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
-          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options && ./b2 -j `nproc`
     - script:
         name: compile googletest
         code: |
@@ -251,7 +256,7 @@ dealii:
         code: |
           cd /home
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
-          export BOOST_ROOT=/home/boost_1_61_0
+          export BOOST_ROOT=/home/boost
           cd yaml-cpp-release-0.5.3
           mkdir build install && cd build
           CC=gcc CXX=g++ cmake \
@@ -466,6 +471,14 @@ dealii-debug:
             make
             make test
     - script:
+        name: compile boost
+        code: |
+          cd /home
+          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
+          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
+          ln -s boost_1_61_0 boost
+          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options,serialization,thread && ./b2 -j `nproc`
+    - script:
         name: compile deal.II
         code: |
             cd /home
@@ -474,26 +487,24 @@ dealii-debug:
             export PETSC_ARCH=x86_64
             export PETSC_DIR=/home/petsc-3.6.4
 
+            boost_lib_dir=/home/boost/stage/lib
+
             cd dealii-8.4.1 && mkdir build bin && cd build
-            cmake -DDEAL_II_WITH_MPI=ON \
+            cmake .. \
+                -DDEAL_II_WITH_MPI=ON \
                 -DDEAL_II_WITH_METIS=ON \
                 -DDEAL_II_WITH_PETSC=ON \
                 -DDEAL_II_COMPONENT_EXAMPLES=OFF \
                 -DMETIS_INCLUDE_DIR=/usr/include \
                 -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
                 -DCMAKE_BUILD_TYPE=Debug \
-                ..
+                -DBOOST_DIR=/home/boost \
+                -DBOOST_LIBRARIES="${boost_lib_dir}/libboost_atomic.so;${boost_lib_dir}/libboost_chrono.so;${boost_lib_dir}/libboost_date_time.so;${boost_lib_dir}/libboost_filesystem.so;${boost_lib_dir}/libboost_log.so;${boost_lib_dir}/libboost_log_setup.so;${boost_lib_dir}/libboost_program_options.so;${boost_lib_dir}/libboost_regex.so;${boost_lib_dir}/libboost_serialization.so;${boost_lib_dir}/libboost_system.so;${boost_lib_dir}/libboost_thread.so;${boost_lib_dir}/libboost_wserialization.so" \
+                -DBOOST_INCLUDE_DIRS=/home/boost
 
             make -j `nproc` && make install && make test
             cd ..
             rm -rf build
-    - script:
-        name: compile boost
-        code: |
-          cd /home
-          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
-          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
-          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options && ./b2 -j `nproc`
     - script:
         name: compile googletest
         code: |
@@ -512,7 +523,7 @@ dealii-debug:
         code: |
           cd /home
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
-          export BOOST_ROOT=/home/boost_1_61_0
+          export BOOST_ROOT=/home/boost
           cd yaml-cpp-release-0.5.3
           mkdir build install && cd build
           CC=gcc CXX=g++ cmake \
@@ -733,6 +744,14 @@ dealii-ubuntu:
             make
             make test
     - script:
+        name: compile boost
+        code: |
+          cd /home
+          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
+          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
+          ln -s boost_1_61_0 boost
+          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options,serialization,thread && ./b2 -j `nproc`
+    - script:
         name: compile deal.II
         code: |
             cd /home
@@ -741,26 +760,24 @@ dealii-ubuntu:
             export PETSC_ARCH=x86_64
             export PETSC_DIR=/home/petsc-3.6.4
 
+            boost_lib_dir=/home/boost/stage/lib
+
             cd dealii-8.4.1 && mkdir build bin && cd build
-            cmake -DDEAL_II_WITH_MPI=ON \
+            cmake .. \
+                -DDEAL_II_WITH_MPI=ON \
                 -DDEAL_II_WITH_METIS=ON \
                 -DDEAL_II_WITH_PETSC=ON \
                 -DDEAL_II_COMPONENT_EXAMPLES=OFF \
                 -DMETIS_INCLUDE_DIR=/usr/include \
                 -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
                 -DCMAKE_BUILD_TYPE=Release \
-                ..
+                -DBOOST_DIR=/home/boost \
+                -DBOOST_LIBRARIES="${boost_lib_dir}/libboost_atomic.so;${boost_lib_dir}/libboost_chrono.so;${boost_lib_dir}/libboost_date_time.so;${boost_lib_dir}/libboost_filesystem.so;${boost_lib_dir}/libboost_log.so;${boost_lib_dir}/libboost_log_setup.so;${boost_lib_dir}/libboost_program_options.so;${boost_lib_dir}/libboost_regex.so;${boost_lib_dir}/libboost_serialization.so;${boost_lib_dir}/libboost_system.so;${boost_lib_dir}/libboost_thread.so;${boost_lib_dir}/libboost_wserialization.so" \
+                -DBOOST_INCLUDE_DIRS=/home/boost
 
             make -j `nproc` && make install && make test
             cd ..
             rm -rf build
-    - script:
-        name: compile boost
-        code: |
-          cd /home
-          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
-          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
-          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options && ./b2 -j `nproc`
     - script:
         name: compile googletest
         code: |
@@ -779,7 +796,7 @@ dealii-ubuntu:
         code: |
           cd /home
           wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
-          export BOOST_ROOT=/home/boost_1_61_0
+          export BOOST_ROOT=/home/boost
           cd yaml-cpp-release-0.5.3
           mkdir build install && cd build
           CC=gcc CXX=g++ cmake \
