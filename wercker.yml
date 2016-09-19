@@ -816,7 +816,7 @@ dealii-ubuntu:
         registry: https://registry.hub.docker.com
 
 build-ubuntu-trusty:
-  box: ubuntu
+  box: ubuntu:trusty
   steps:
     - script:
         name: install dependencies
@@ -960,7 +960,7 @@ build-ubuntu-trusty:
             tar -czf $WERCKER_OUTPUT_DIR/foam-extend-3.2.tar.gz foam-extend-3.2
 
 dealii-ubuntu-trusty:
-  box: ubuntu
+  box: ubuntu:trusty
   steps:
     - script:
         name: install dependencies
