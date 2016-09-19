@@ -994,8 +994,6 @@ dealii-ubuntu-trusty:
               valgrind \
               python-yaml \
               libmetis-dev \
-              libgfortran-5-dev \
-              libgcc-5-dev \
               libopenblas-dev
     - script:
         name: initialize foam-extend
