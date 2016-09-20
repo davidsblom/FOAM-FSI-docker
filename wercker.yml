@@ -822,7 +822,17 @@ build-ubuntu-trusty:
         name: install dependencies
         code: |
             apt-get clean && apt-get update
-            apt-get install -y ca-certificates git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev libopenmpi-dev openmpi-bin rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind libmetis-dev
+            apt-get install -y ca-certificates git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev rpm wget cmake hwloc scotch gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind libmetis-dev
+    - script:
+        name: compile openmpi
+        code: |
+            cd /home
+            wget https://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.4.tar.gz -O - | tar xz
+            cd openmpi-1.10.4
+            ./configure
+            make -j `nproc` all
+            make test
+            make install
     - script:
         name: download foam-extend-3.2
         code: |
@@ -976,8 +986,6 @@ dealii-ubuntu-trusty:
               libreadline-dev \
               libncurses5-dev \
               libxt-dev \
-              libopenmpi-dev \
-              openmpi-bin \
               rpm wget \
               cmake \
               hwloc \
@@ -995,6 +1003,16 @@ dealii-ubuntu-trusty:
               python-yaml \
               libmetis-dev \
               libopenblas-dev
+    - script:
+        name: compile openmpi
+        code: |
+            cd /home
+            wget https://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.4.tar.gz -O - | tar xz
+            cd openmpi-1.10.4
+            ./configure
+            make -j `nproc` all
+            make test
+            make install
     - script:
         name: initialize foam-extend
         code: mv foam-extend-3.2.tar.gz /home/
