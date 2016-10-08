@@ -1088,3 +1088,293 @@ dealii-ubuntu:
         repository: davidsblom/foam-fsi
         tag: ubuntu
         registry: https://registry.hub.docker.com
+
+build-ubuntu-trusty:
+  box: ubuntu:trusty
+  steps:
+    - script:
+        name: install dependencies
+        code: |
+            apt-get clean && apt-get update
+            apt-get install -y ca-certificates git build-essential flex bison zlib1g-dev libreadline-dev libncurses-dev libxt-dev rpm wget cmake hwloc gfortran python unzip scons libiberty-dev libscotch-dev liblapack-dev libblas-dev cppcheck valgrind libmetis-dev
+    - script:
+        name: compile openmpi
+        code: |
+            cd /home
+            wget https://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.4.tar.gz -O - | tar xz
+            cd openmpi-1.10.4
+            ./configure
+            make -j `nproc` all
+            make test
+            make install
+    - script:
+        name: download foam-extend-3.2
+        code: |
+            git clone https://github.com/Unofficial-Extend-Project-Mirror/foam-extend-foam-extend-3.2.git foam-extend-3.2
+            cd foam-extend-3.2
+            find src applications -name "*.L" -type f | xargs sed -i -e 's=\(YY\_FLEX\_SUBMINOR\_VERSION\)=YY_FLEX_MINOR_VERSION < 6 \&\& \1='
+            rm -rf tutorials .git
+    - script:
+        name: configuration
+        code: |
+            sed -i s/"CC          = g++ -m64"/"CC          = mpicxx -m64"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++
+            sed -i s/"c++OPT      = -O3"/"c++OPT      = -O3 -DNDEBUG"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Opt
+            sed -i s/"c++DBUG    = -ggdb3 -DFULLDEBUG"/"c++DBUG    = -g -DFULLDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN --coverage -fprofile-arcs -ftest-coverage"/g foam-extend-3.2/wmake/rules/linux64Gcc/c++Debug
+
+            settings=foam-extend-3.2/etc/prefs.sh
+            echo "#!/bin/bash" >> $settings
+            echo "export FOAM_INST_DIR=`pwd`" >> $settings
+            echo "export PARAVIEW_SYSTEM=1" >> $settings
+            echo "export CMAKE_SYSTEM=1" >> $settings
+            echo "export HWLOC_SYSTEM=1" >> $settings
+            echo "export SCOTCH_SYSTEM=1" >> $settings
+            echo "export SCOTCH_INCLUDE_DIR=/usr/include/scotch" >> $settings
+            echo "export SCOTCH_LIB_DIR=/usr/lib" >> $settings
+            echo "export METIS_SYSTEM=1" >> $settings
+            echo "export METIS_INCLUDE_DIR=/usr/include" >> $settings
+            echo "export METIS_LIB_DIR=/usr/lib" >> $settings
+            echo "export PARMETIS_SYSTEM=1" >> $settings
+            echo "export PARMETIS_INCLUDE_DIR=/usr/include" >> $settings
+            echo "export PARMETIS_LIB_DIR=/usr/lib" >> $settings
+            echo "export CUDA_IGNORE=1" >> $settings
+            echo "export SWAK4FOAM_SYSTEM=1" >> $settings
+            echo "export PARMGRIDGEN_SYSTEM=1" >> $settings
+            echo "export LIBCCMIO_SYSTEM=1" >> $settings
+            echo "export WM_MPLIB=SYSTEMOPENMPI" >> $settings
+            echo "export OPENMPI_DIR=/usr" >> $settings
+            echo "export OPENMPI_BIN_DIR=/usr/bin" >> $settings
+            echo "unset WM_THIRD_PARTY_USE_CMAKE_322" >> $settings
+            echo "unset WM_THIRD_PARTY_USE_HWLOC_1101" >> $settings
+            echo "unset WM_THIRD_PARTY_USE_SCOTCH_604" >> $settings
+            cat $settings
+    - script:
+        name: third-party packages
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            # wmake is required for subsequent targets
+            ( cd wmake/src && make )
+
+            # build ThirdParty sources
+            ( cd $WM_THIRD_PARTY_DIR && ./AllMake )
+    - script:
+        name: foam-extend libraries-1
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            cd src
+            wmakePrintBuild -check || /bin/rm -f foam/Make/$WM_OPTIONS/global.? 2>/dev/null
+            wmakeLnInclude foam
+            wmakeLnInclude meshTools
+            wmakeLnInclude OSspecific/$WM_OSTYPE
+            wmake libo  OSspecific/$WM_OSTYPE
+            wmake libso foam
+            decompositionMethods/AllwmakeLnInclude
+            (cd decompositionMethods && wmakeLnInclude decompositionMethods && wmake libso decompositionMethods && wmake libso scotchDecomp)
+    - script:
+        name: foam-extend libraries-2
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            cd src
+            wmake libso lagrangian/basic
+            wmake libso edgeMesh
+            wmake libso surfMesh
+            wmake libso meshTools
+            wmake libso finiteVolume
+            wmake libso finiteArea
+            wmake libso lduSolvers
+    - script:
+        name: foam-extend libraries-3
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            cd src
+            wmake libso tetFiniteElement
+            dynamicMesh/AllwmakeLnInclude
+            dynamicMesh/Allwmake
+            wmake libso coupledMatrix
+            wmake libso sampling
+            wmake libso ODE
+    - script:
+        name: foam-extend libraries-4
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            cd src
+            thermophysicalModels/Allwmake
+            transportModels/Allwmake
+    - script:
+        name: foam-extend libraries-5
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            cd src
+            turbulenceModels/Allwmake
+            lagrangian/Allwmake
+    - script:
+        name: foam-extend libraries-6
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            cd src && wmake libso solidModels
+    - script:
+        name: foam-extend apps
+        code: |
+            cd foam-extend-3.2 && source etc/prefs.sh && source etc/bashrc
+
+            (cd src/postProcessing && ./Allwmake)
+            (cd src/mesh/blockMesh && wmake libso)
+            (cd applications/utilities/mesh/generation/blockMesh && wmake)
+            (cd applications/utilities/mesh/manipulation/renumberMesh && wmake)
+            (cd applications/utilities/mesh/manipulation/checkMesh && wmake)
+            (cd applications/utilities/parallelProcessing/decomposePar && wmake)
+            (cd applications/utilities/parallelProcessing/reconstructPar && wmake)
+    - script:
+        name: cleanup build files
+        code: |
+            cd foam-extend-3.2
+            find . -not -path './applications/bin/linux64GccDPOpt' -not -path './lib/linux64GccDPOpt' -not -path './ThirdParty/*' -name 'linux64GccDPOpt' -type d -print -prune -exec rm -rf {} \;
+            find . -not -path './applications/bin/linux64GccDPDebug' -not -path './lib/linux64GccDPDebug' -not -path './ThirdParty/*' -name 'linux64GccDPDebug' -type d -print -prune -exec rm -rf {} \;
+            rm -rf ThirdParty/rpmBuild/BUILD applications/solvers applications/utilities
+    - script:
+        name: create archive
+        code: |
+            echo "export FOAM_INST_DIR=/home" >> foam-extend-3.2/etc/prefs.sh
+            tar -czf $WERCKER_OUTPUT_DIR/foam-extend-3.2.tar.gz foam-extend-3.2
+
+dealii-ubuntu-trusty:
+  box: ubuntu:trusty
+  steps:
+    - script:
+        name: install dependencies
+        code: |
+            apt-get clean && apt-get update
+            apt-get install -y \
+              ca-certificates \
+              git \
+              build-essential \
+              flex \
+              bison \
+              zlib1g-dev \
+              libreadline-dev \
+              libncurses5-dev \
+              libxt-dev \
+              rpm \
+              wget \
+              cmake \
+              hwloc \
+              gfortran \
+              python \
+              unzip \
+              scons \
+              libiberty-dev \
+              libscotch-dev \
+              liblapack-dev \
+              libblas-dev \
+              cppcheck \
+              valgrind \
+              python-yaml \
+              libmetis-dev \
+              libopenblas-dev
+    - script:
+        name: compile openmpi
+        code: |
+            cd /home
+            wget https://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.4.tar.gz -O - | tar xz
+            cd openmpi-1.10.4
+            ./configure
+            make -j `nproc` all
+            make test
+            make install
+            cd .. && rm -rf openmpi-1.10.4
+    - script:
+        name: initialize foam-extend
+        code: mv foam-extend-3.2.tar.gz /home/
+    - script:
+        name: compile PETSc
+        code: |
+            cd /home
+            export PETSC_ARCH=x86_64
+            export PETSC_DIR=/home/petsc-3.6.4
+            wget http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-lite-3.6.4.tar.gz -O - | tar xz
+            cd $PETSC_DIR
+            ./config/configure.py --with-shared=1 \
+                --with-x=0 --with-cc=mpicc --with-cxx=mpicxx \
+                --with-fc=mpif77 --with-debugging=0 \
+                --download-mumps --download-scalapack \
+                --download-fblaslapack --download-hypre \
+                --download-ptscotch
+            make
+            make test
+    - script:
+        name: compile boost
+        code: |
+          cd /home
+          wget http://downloads.sourceforge.net/project/boost/boost/1.61.0/boost_1_61_0.tar.bz2 -O - | tar xj
+          sed -i "s/string const/std::string const/" ./boost_1_61_0/boost/rational.hpp
+          ln -s boost_1_61_0 boost
+          cd boost_1_61_0 && ./bootstrap.sh --with-libraries=log,program_options,serialization,thread && ./b2 -j `nproc`
+    - script:
+        name: compile deal.II
+        code: |
+            cd /home
+            wget https://github.com/dealii/dealii/releases/download/v8.4.1/dealii-8.4.1.tar.gz -O - | tar xz
+
+            export PETSC_ARCH=x86_64
+            export PETSC_DIR=/home/petsc-3.6.4
+
+            boost_lib_dir=/home/boost/stage/lib
+
+            cd dealii-8.4.1 && mkdir build bin && cd build
+            cmake .. \
+                -DDEAL_II_WITH_MPI=ON \
+                -DDEAL_II_WITH_METIS=ON \
+                -DDEAL_II_WITH_PETSC=ON \
+                -DDEAL_II_COMPONENT_EXAMPLES=OFF \
+                -DMETIS_INCLUDE_DIR=/usr/include \
+                -DCMAKE_INSTALL_PREFIX=`pwd`/../bin \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DBOOST_DIR=/home/boost \
+                -DBOOST_LIBRARIES="${boost_lib_dir}/libboost_atomic.so;${boost_lib_dir}/libboost_chrono.so;${boost_lib_dir}/libboost_date_time.so;${boost_lib_dir}/libboost_filesystem.so;${boost_lib_dir}/libboost_log.so;${boost_lib_dir}/libboost_log_setup.so;${boost_lib_dir}/libboost_program_options.so;${boost_lib_dir}/libboost_regex.so;${boost_lib_dir}/libboost_serialization.so;${boost_lib_dir}/libboost_system.so;${boost_lib_dir}/libboost_thread.so;${boost_lib_dir}/libboost_wserialization.so" \
+                -DBOOST_INCLUDE_DIRS=/home/boost
+
+            make -j `nproc` && make install && make test
+            cd ..
+            rm -rf build
+    - script:
+        name: compile googletest
+        code: |
+          cd /home
+          wget https://github.com/google/googletest/archive/release-1.8.0.tar.gz -O - | tar xz
+          cd googletest-release-1.8.0 && mkdir build install && cd build
+          cmake \
+            -DCMAKE_CXX_COMPILER=g++ \
+            -DCMAKE_CC_COMPILER=gcc \
+            -DCMAKE_INSTALL_PREFIX=`pwd`/../install \
+            ..
+          make -j `nproc` && make install && make test
+          cd .. && rm -rf build
+    - script:
+        name: compile yaml-cpp
+        code: |
+          cd /home
+          wget https://github.com/jbeder/yaml-cpp/archive/release-0.5.3.tar.gz -O - | tar xz
+          export BOOST_ROOT=/home/boost
+          cd yaml-cpp-release-0.5.3
+          mkdir build install && cd build
+          CC=gcc CXX=g++ cmake \
+            -DBUILD_SHARED_LIBS=ON \
+            -DBoost_NO_BOOST_CMAKE=TRUE \
+            -DBoost_NO_SYSTEM_PATHS=TRUE \
+            -DBOOST_ROOT=${BOOST_ROOT} \
+            -DCMAKE_INSTALL_PREFIX=`pwd`/../install \
+            ..
+          make -j `nproc` && make install
+          cd .. && rm -rf build
+    - internal/docker-push:
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        repository: davidsblom/foam-fsi
+        tag: ubuntu-trusty
+        registry: https://registry.hub.docker.com
